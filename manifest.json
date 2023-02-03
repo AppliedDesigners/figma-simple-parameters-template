@@ -6,14 +6,32 @@
   "editorType": ["figma", "figjam"],
   "menu": [
     {
-      "name": "Text",
-      "command": "Text",
+      "name": "CMD1",
+      "command": "commandOne",
       "parameters": [
         {
-          "name": "Text",
-          "key": "text",
+          "name": "ParamOne",
+          "key": "paramOne",
+          "allowFreeform": false,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "name": "CMD2",
+      "command": "commandTwo",
+      "parameters": [
+        {
+          "name": "ParamTwo",
+          "key": "paramTwo",
           "allowFreeform": true,
           "optional": false
+        },
+        {
+          "name": "ParamThree",
+          "key": "paramThree",
+          "allowFreeform": true,
+          "optional": true
         }
       ]
     }
