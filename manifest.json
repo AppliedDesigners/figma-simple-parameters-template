@@ -16,6 +16,24 @@
           "optional": false
         }
       ]
+    },
+    {
+      "name": "Show notice",
+      "command": "showNotice",
+      "parameters": [
+        {
+          "name": "Text",
+          "key": "text",
+          "allowFreeform": true,
+          "optional": false
+        },
+        {
+          "name": "Mode",
+          "key": "mode",
+          "allowFreeform": false,
+          "optional": false
+        }
+      ]
     }
   ]
 }

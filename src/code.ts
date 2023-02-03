@@ -32,6 +32,29 @@
  */
 const DEFAULT_FONT_CONFIG = { family: "Inter", style: "Regular" };
 
+// https://www.figma.com/plugin-docs/api/properties/figma-createtext/
+const createTextNode = async (parameters) => {
+  let node = figma.createText();
+  // Note: you need tell figma what fonts to load. You can do this once.
+  await figma.loadFontAsync(DEFAULT_FONT_CONFIG);
+  node.characters = parameters.text;
+  node.fontSize = 100;
+  node.fills = [{ type: "SOLID", color: { r: 0.3, g: 0.6, b: 0.9 } }];
+
+  figma.viewport.scrollAndZoomIntoView([node]);
+};
+
+// https://www.figma.com/plugin-docs/api/properties/figma-notify/
+const showNotice = (parameters) => {
+  const options = {};
+  if (parameters.mode === "error") {
+    options.error = true;
+    options.timeout = 10000;
+  }
+
+  figma.notify(parameters.text, options);
+};
+
 let suggestions = () => {
   return ["A", "B", "C"];
 };
@@ -41,24 +64,13 @@ let suggestions = () => {
 figma.parameters.on("input", ({ key, query, result }) => {
   console.log("User typed: ", query);
   switch (key) {
-    case "paramThree":
-      result.setSuggestions(suggestions());
+    case "mode":
+      result.setSuggestions(["info", "error"]);
       break;
     default:
       return;
   }
 });
-
-const createTextNode = async (text: string) => {
-  let node = figma.createText();
-  // Note: you need tell figma what fonts to load. You can do this once.
-  await figma.loadFontAsync(DEFAULT_FONT_CONFIG);
-  node.characters = text;
-  node.fontSize = 100;
-  node.fills = [{ type: "SOLID", color: { r: 0.3, g: 0.6, b: 0.9 } }];
-
-  figma.viewport.scrollAndZoomIntoView([node]);
-};
 
 /**
  * Perform action after all parameters have been added
@@ -79,10 +91,13 @@ figma.on("run", async ({ command, parameters }) => {
     );
 
     switch (command) {
+      // https://www.figma.com/plugin-docs/api/properties/figma-createtext/
       case "createText":
-        await createTextNode(parameters.text);
+        await createTextNode(parameters);
         break;
-      case "commandTwo":
+      // https://www.figma.com/plugin-docs/api/properties/figma-notify/
+      case "showNotice":
+        showNotice(parameters);
         break;
 
       default:
